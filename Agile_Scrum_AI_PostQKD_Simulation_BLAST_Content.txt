@@ -1,0 +1,1519 @@
+================================================================================
+BLAST RESEARCH POSTER — FULL CONTENT PACKAGE (SOFTWARE ENGINEERING COMPANION)
+Topic: Applying Incremental Development, Scrum, and AI-Assisted Research to
+       Build and Validate a Post-QKD (Hybrid QKD + PQC) Network Simulation
+Companion to: QKD_PostQuantum_BLAST_Poster_Content.txt
+Source basis: BLA_02_swe.txt (software process models) +
+              BLAST Poster & Abstract Requirements
+Format: Plain-text master copy for poster layout + abstract preparation
+Generated: 2026-10-28
+================================================================================
+
+--------------------------------------------------------------------------------
+[ FIELDS YOU MUST COMPLETE BEFORE SUBMISSION — marked <<FILL>> ]
+--------------------------------------------------------------------------------
+Student name .................. Truong Phat Tu
+Faculty Sponsor ............... Dr. Victor Govindaswamy
+Course / section .............. <<FILL — Computer Networks, Section xx>>
+Semester ...................... Fall 2026
+Institution ................... <<FILL>>
+GitHub repository URL ......... <<FILL>>  (+ QR code on poster)
+YouTube BLAST URL ............. <<FILL>>  (+ QR code if applicable)
+LinkedIn post URL ............. <<FILL if required>>
+Simulation repo commit hash ... <<FILL — pin the exact version you demo>>
+--------------------------------------------------------------------------------
+
+--------------------------------------------------------------------------------
+[ HONESTY / VERIFICATION NOTICE — READ BEFORE USING THIS FILE ]
+--------------------------------------------------------------------------------
+This document contains NO invented experimental results. Every place where a
+number must come from YOUR OWN simulation run is marked <<YOUR DATA>>. Every
+citation detail I could not confirm from a live source or from your attached
+documents is marked <<VERIFY>>. Claims drawn from your attached course
+documents are cited to them directly. Do not fill <<YOUR DATA>> with estimates.
+Run the code, record the output, paste the real figure.
+--------------------------------------------------------------------------------
+
+
+================================================================================
+1. TITLE & IDENTIFICATION
+================================================================================
+
+TITLE (primary):
+"Sprinting Toward Quantum-Safe Networks: An Incremental Scrum and AI-Assisted
+ Engineering Process for Building and Verifying a Hybrid QKD + PQC Simulation"
+
+SUBTITLE:
+"How software process discipline — increments, sprints, Definition of Done,
+ and a test strategy with real oracles — turns a post-quantum research idea
+ into verifiable working software"
+
+ALTERNATE SHORTER TITLE (if header space is tight):
+"Process Before Physics: Agile + AI Engineering of a Post-QKD Simulator"
+
+Author ............ Truong Phat Tu
+Course ............ Computer Networks — <<FILL section>>
+Semester .......... Fall 2026
+Faculty Sponsor ... Dr. Victor Govindaswamy
+Institution ....... <<FILL>>
+Track ............. Software Engineering Process + Emerging Network Security
+Hashtag ........... #WGP — "From Learning to Building — From Building to
+                    Innovation."
+
+RELATIONSHIP TO THE COMPANION POSTER:
+The companion file answers "WHAT is post-QKD and where does it fit in the
+network stack." THIS file answers a different and equally graded question:
+"HOW do you actually engineer, verify, and trust a research artifact about
+it — as a solo student, on a semester schedule, with AI tools available?"
+
+
+================================================================================
+2. PROBLEM / MOTIVATION
+================================================================================
+
+THE PROBLEM IN ONE SENTENCE:
+Student research on emerging network technologies routinely fails not because
+the science is too hard, but because the WORK PROCESS is undisciplined — a
+single giant build attempted at the end of the semester, no intermediate
+working version, no tests, no record of what was verified versus what was
+assumed, and increasingly, AI-generated content accepted without validation.
+
+WHY THIS IS A REAL ENGINEERING PROBLEM, NOT A STUDY-HABITS COMPLAINT:
+
+  (a) THE REQUIREMENTS GENUINELY CHANGE MID-PROJECT.
+      Post-QKD is a moving target. Standards evolve, algorithm names change
+      (the Open Quantum Safe Docker image renamed `kyber768` to `mlkem768`
+      between versions to reflect FIPS 203 finalization, breaking scripts
+      written against the older name) [8]. A plan-driven process that fixes
+      all requirements up front is structurally mismatched to this domain.
+      Your own course material states the principle directly: "Plan-driven
+      processes are processes where all of the process activities are planned
+      in advance and progress is measured against this plan. In agile
+      processes, planning is incremental and it is easier to change the
+      process to reflect changing customer requirements" [1].
+
+  (b) A SOLO STUDENT HAS NO SAFETY NET.
+      There is no QA team, no code reviewer, no integration engineer. Process
+      must substitute for personnel. Scrum's inspect-and-adapt events and a
+      hard Definition of Done are the cheapest available replacements.
+
+  (c) SIMULATION SOFTWARE CAN BE CONFIDENTLY WRONG.
+      A QKD simulator that silently produces a key is indistinguishable, from
+      the outside, from one that produces a CORRECT key. Unlike a web app,
+      there is no visible crash when the cryptography is subtly broken. This
+      makes TEST ORACLE DESIGN — not coding — the hardest part of the project.
+
+  (d) AI ASSISTANCE INTRODUCES A NEW FAILURE MODE.
+      Generative models produce plausible, well-formatted, incorrect
+      citations and plausible, well-formatted, incorrect code. The course
+      research expectations are explicit: "Do not base the project primarily
+      on Wikipedia, random blogs, social-media posts, marketing pages, or
+      AI-generated summaries," and "AI tools may assist only according to
+      course policy and do not replace scholarly or authoritative sources"
+      [2]. A defensible process must therefore include an explicit
+      AI-verification gate, not an informal intention to "check later."
+
+MOTIVATING QUESTION DRIVING THIS WORK:
+  "What is the smallest disciplined process that lets one student produce a
+   post-QKD simulation that is demonstrably correct, incrementally delivered,
+   reproducible by a third party, and honest about which parts are verified
+   versus assumed?"
+
+
+================================================================================
+3. BACKGROUND — MINIMUM CONCEPTS A READER NEEDS
+================================================================================
+
+B1. SOFTWARE PROCESS MODEL — AND WHY THERE IS NO "RIGHT" ONE
+    A software process model is an abstract description of how development
+    work is organized: what activities occur, in what order, and how progress
+    is judged. The foundational position in your course material is worth
+    quoting because it prevents a common poster mistake (declaring Agile
+    "better" than Waterfall): "In practice, most practical processes include
+    elements of both plan-driven and agile approaches. There are no right or
+    wrong software processes" [1].
+
+B2. THE FIVE APPROACHES FROM BLA_02 (condensed)
+    - WATERFALL. Sequential, linear: Requirements -> Design -> Implementation
+      -> Testing -> Maintenance. Each phase completed fully before the next.
+      Suited to large projects with fixed, well-understood requirements,
+      strict regulatory compliance, or safety criticality (aerospace, medical
+      equipment, infrastructure) [1].
+    - INCREMENTAL DEVELOPMENT. The system is built in small, manageable
+      pieces, each adding capability to a working whole [1].
+    - INTEGRATION AND CONFIGURATION. The system is assembled largely from
+      existing, reusable components rather than written from scratch [1].
+    - PLAN-DRIVEN DEVELOPMENT. All activities planned in advance; progress
+      measured against the plan [1].
+    - AGILE DEVELOPMENT. Iterative and human-centered: continuous delivery,
+      flexibility, customer collaboration, rapid response to changing
+      requirements. "Work progresses through short, time-boxed iterations
+      (sprints) resulting in working software increments." Appropriate for
+      startups, innovative products with changing requirements, customer-
+      facing applications, or teams needing rapid adaptation from frequent
+      feedback [1].
+
+B3. INCREMENT (the precise meaning — commonly misused)
+    An INCREMENT is not "a chunk of work finished." Under Scrum, an Increment
+    is a concrete stepping stone toward the Product Goal; each Increment is
+    ADDITIVE to all prior Increments, must be thoroughly verified to ensure
+    all Increments work together, and must be USABLE. Critically, work cannot
+    be considered part of an Increment unless it meets the Definition of Done
+    [3]. An increment that does not run is not an increment — it is
+    work-in-progress.
+
+B4. SCRUM — THE FRAMEWORK IN ITS OWN TERMS
+    Scrum is a lightweight framework built on empiricism (transparency,
+    inspection, adaptation) with:
+      - THREE ACCOUNTABILITIES: Product Owner (maximizes product value and
+        owns the Product Backlog), Scrum Master (establishes Scrum, coaches,
+        removes impediments), Developers (create a usable Increment each
+        Sprint).
+      - FIVE EVENTS: the Sprint (the container, a fixed period of one month
+        or less), Sprint Planning, Daily Scrum, Sprint Review, Sprint
+        Retrospective.
+      - THREE ARTIFACTS, each with a commitment: Product Backlog (commitment:
+        Product Goal), Sprint Backlog (commitment: Sprint Goal), Increment
+        (commitment: Definition of Done) [3].
+    SOLO ADAPTATION NOTE FOR THE POSTER: a one-student project cannot
+    populate three accountabilities with three people. State plainly that you
+    hold all three roles and that the risk this creates — no independent
+    challenge to your own decisions — is mitigated by (i) a written
+    Definition of Done you cannot silently relax, (ii) automated CI as an
+    impartial gatekeeper, and (iii) faculty sponsor review at Sprint Review.
+    Describing this honestly is stronger than claiming you "ran Scrum."
+
+B5. VERIFICATION VS. VALIDATION (the distinction graders look for)
+    - VERIFICATION: "Are we building the product right?" Does the code match
+      its specification? (unit tests, property tests, static analysis)
+    - VALIDATION: "Are we building the right product?" Does the simulation
+      actually represent BB84 and hybrid key derivation as the literature
+      describes them? (comparison against analytical bounds and published
+      protocol behavior)
+    A simulator can pass 100% of its unit tests and still be an invalid model
+    of QKD. Both are required.
+
+B6. TEST ORACLE
+    An oracle is the mechanism that decides whether an observed output is
+    correct. In ordinary software the oracle is obvious. In a stochastic
+    quantum-network simulation it is NOT, because every run differs. Section
+    6 and Section 9 describe the three oracle types this project uses:
+    analytical bounds, metamorphic relations, and cross-implementation
+    differential testing.
+
+B7. WHAT "POST-QKD" MEANS HERE (carried over from the companion poster)
+    The hybrid architecture in which QKD supplies information-theoretic key
+    material on specific high-value links while PQC supplies scalable
+    authentication and an independent second key-agreement path, with the
+    final session key derived from BOTH so the system survives failure of
+    either. Your attached QKD reference identifies hybrid QKD+PQC — "such as
+    lattice-based cryptographic algorithms" — as "gaining traction as a
+    practical approach for robust security," rates the authentication gap as
+    MEDIUM severity, and gives a resolution timeline of "Short term (1–3
+    years) for hybrid solutions; longer term (5–10 years) for full reliance
+    on quantum-based authentication technologies like QDS and QSIs" [4].
+
+
+================================================================================
+4. CONNECTION TO CN1 AND SOFTWARE-ENGINEERING CONCEPTS
+================================================================================
+
+This section is the graded core. Each mapping must be explicit and specific.
+
+PROCESS CONCEPT      | HOW IT MAPS ONTO THE POST-QKD SIMULATION PROJECT
+---------------------|----------------------------------------------------------
+INCREMENTAL          | The simulator is NOT built as one artifact. Increment 1
+ DEVELOPMENT         | is classical BB84 with a perfect channel. Increment 2
+                     | adds loss and QBER. Increment 3 adds reconciliation and
+                     | privacy amplification. Increment 4 adds the ETSI-style
+                     | key-delivery API. Increment 5 adds the PQC/hybrid key
+                     | schedule. EACH ONE RUNS AND PRODUCES OUTPUT. This is
+                     | the course definition applied literally: "developing
+                     | the system in small, manageable pieces" [1].
+---------------------|----------------------------------------------------------
+TIME-BOXED SPRINTS   | Work progresses "through short, time-boxed iterations
+                     | (sprints) resulting in working software increments"
+                     | [1]. Fixed 2-week sprints prevent the classic student
+                     | failure mode of an unbounded "I'll finish it when it's
+                     | perfect" phase that ends at the deadline with nothing
+                     | runnable.
+---------------------|----------------------------------------------------------
+DEFINITION OF DONE   | The single most important artifact in a solo project.
+ (DoD)               | Scrum states work cannot be part of an Increment unless
+                     | it meets the DoD [3]. Here the DoD is the thing that
+                     | stops you from calling AI-generated code "finished."
+                     | Full DoD text in Section 6, Phase 4.
+---------------------|----------------------------------------------------------
+INTEGRATION AND      | The project deliberately REUSES rather than reimplements:
+ CONFIGURATION       | a quantum network simulator (NetSquid / SeQUeNCe /
+                     | QuNetSim), a PQC library (liboqs / oqs-provider), and
+                     | the ETSI REST API contract. This is the course's
+                     | "integration and configuration" model [1], and it is the
+                     | correct choice because reimplementing ML-KEM yourself
+                     | would be both slower and less trustworthy than using a
+                     | maintained implementation [5][6].
+---------------------|----------------------------------------------------------
+PLAN-DRIVEN ELEMENTS | Not everything is agile. The CRYPTOGRAPHIC INTERFACE
+ (hybrid process)    | CONTRACT — the ETSI GS QKD 014 REST shapes, the JSON key
+                     | container, key_ID semantics — is fixed up front and NOT
+                     | renegotiated sprint to sprint, because it is an external
+                     | standard [7]. This is the practical realization of
+                     | "most practical processes include elements of both" [1].
+---------------------|----------------------------------------------------------
+NETWORK: THROUGHPUT  | The simulation's primary measured output is SECRET KEY
+                     | RATE (bits/s) as a function of channel loss. This is a
+                     | throughput measurement with a cryptographic unit.
+---------------------|----------------------------------------------------------
+NETWORK: PACKET LOSS | Photon loss drives the sifting ratio; QBER drives how
+ & ERROR CONTROL     | much key survives privacy amplification. Both are
+                     | simulated explicitly and both are TEST TARGETS (see the
+                     | analytical oracles in Section 9).
+---------------------|----------------------------------------------------------
+NETWORK: QUEUING     | The key pool in the Key Management Entity is a
+                     | producer/consumer queue. The simulation's load test
+                     | deliberately drives it to exhaustion to confirm the
+                     | implementation returns the correct failure response
+                     | rather than silently reusing key material. ETSI defines
+                     | HTTP error semantics including 503 for server-side
+                     | error / key unavailability [7].
+---------------------|----------------------------------------------------------
+NETWORK: PROTOCOLS   | The REST key-delivery interface is tested as a protocol:
+ & ENCAPSULATION     | correct URIs, correct JSON key container shape, correct
+                     | status codes. ETSI specifies "the format of the URIs,
+                     | the communication protocols (HTTPS), and the JSON ...
+                     | data format encoding of posted parameters and responses,
+                     | including key material" [7].
+---------------------|----------------------------------------------------------
+NETWORK: SECURITY    | Security properties become ASSERTIONS: keys at both
+                     | endpoints must match bit-for-bit; a simulated
+                     | intercept-resend eavesdropper must raise QBER
+                     | measurably; a session key must change if ANY contributing
+                     | secret changes (the hybrid property).
+---------------------|----------------------------------------------------------
+CONFIGURATION        | Every experimental run is reproducible: pinned
+ MANAGEMENT          | dependency versions, a recorded RNG seed, and a commit
+                     | hash attached to every result figure. Without this, no
+                     | number on the poster can be defended.
+---------------------|----------------------------------------------------------
+QUALITY CONTROL      | ISO/IEC/IEEE 29119 provides the internationally agreed
+ (standardized)      | framework: Part 1 concepts and definitions, Part 2 test
+                     | processes, Part 3 test documentation, Part 4 test
+                     | techniques, Part 5 keyword-driven testing, Part 6
+                     | guidelines for use in Agile projects, and Part 11
+                     | testing of AI-based systems [9][10]. Parts 6 and 11 are
+                     | the two directly relevant to THIS project.
+
+
+================================================================================
+5. THE "TECHNOLOGY" — PROCESS + TOOLING, AND WHERE EACH PIECE FITS
+================================================================================
+
+This poster's "emerging technology" is a PROCESS-AND-TOOLCHAIN COMBINATION:
+incremental Scrum delivery, AI-assisted research under verification control,
+and automated quality control applied to post-quantum network simulation.
+Below is what is actually being used and what each part is for.
+
+LAYER A — PROCESS FRAMEWORK
+  Scrum (Schwaber & Sutherland, 2020 Scrum Guide) [3], adapted for a single
+  developer, with 2-week sprints and a written Definition of Done.
+
+LAYER B — QUANTUM NETWORK SIMULATION ENGINE (choose ONE; justify the choice)
+  Verified, real, actively used options:
+  - NetSquid — discrete-event simulator for quantum networks with detailed
+    physical modeling; supports hardware imperfections, photon loss, and
+    decoherence; designed for scale [11][12].
+  - SeQUeNCe — customizable discrete-event simulator of quantum networks,
+    open-source, modular design with cross-module communication [13].
+  - QuNetSim — focuses on simplifying development and implementation of
+    quantum network protocols; uses a layering framework inspired by the OSI
+    model but focuses on upper layers, leaving the physical layer
+    unspecified [12][13].
+  - SimulaQron — distributed simulation whose main purpose is application
+    development, intended to run across physically distinct classical
+    computers; it does not aim at realistic physical models of channels and
+    devices [12].
+  - SQUANCH — allows quantum network simulation with configurable error
+    models at the physical layer, but does not use a simulation engine that
+    accurately tracks time [12].
+  RECOMMENDED CHOICE AND WHY: if your research question is about KEY RATE
+  VERSUS LOSS, you need physical-layer realism and timing, which points to
+  NetSquid or SeQUeNCe. If your research question is about PROTOCOL LOGIC and
+  the key-delivery API, QuNetSim's higher abstraction is sufficient and
+  faster to learn. State your choice and this reasoning on the poster — the
+  rubric rewards justified technical decisions.
+  <<FILL: which simulator you selected, and the version you pinned>>
+
+LAYER C — POST-QUANTUM CRYPTOGRAPHY LIBRARY
+  Open Quantum Safe (OQS): liboqs, an open-source C library of quantum-
+  resistant KEMs and signature algorithms with a common API plus a test
+  harness and benchmarking routines; and oqs-provider, a standalone OpenSSL 3
+  provider enabling liboqs-based quantum-safe and hybrid key exchange for
+  TLS 1.3 and X.509 certificate generation [5][6]. OQS is part of the Linux
+  Foundation's Post-Quantum Cryptography Alliance; it was founded by Douglas
+  Stebila and Michele Mosca at the University of Waterloo [5][6]. In liboqs,
+  ML-KEM is listed as "Standardized by NIST," actively maintained, and
+  classified Tier 1 (Core) [6]. Python 3 bindings exist via a language
+  wrapper [6].
+  PRACTICAL WARNING WORTH PUTTING ON THE POSTER: algorithm naming is a real
+  operational hazard. The OQS Docker image moved from `kyber768` to
+  `mlkem768` between versions to reflect FIPS 203 finalization, which breaks
+  documentation and scripts written before the rename; `X25519MLKEM768` and
+  the older draft name `x25519_mlkem768` are not interchangeable [8]. This is
+  exactly the kind of change that justifies an agile rather than plan-driven
+  process.
+
+LAYER D — QUANTUM PROGRAMMING FRAMEWORKS (for any circuit-level component)
+  Your attached textbook compares Qiskit, Cirq, and Q#. Relevant points for
+  tool selection:
+  - Cirq: fine-grained hardware control, excellent for NISQ research,
+    explicit qubit topology handling, strong alignment with experimental
+    workflows; but a steeper learning curve, less beginner-friendly than
+    Qiskit, limited high-level algorithm libraries, and hardware-specific
+    abstractions that reduce portability [14].
+  - Q#: a standalone domain-specific language, not a Python library; hybrid
+    classical–quantum model, strong static typing, automatic qubit allocation
+    and release, built-in support for reversible computation, native
+    abstractions for quantum operations and measurements; emphasizes
+    correctness, composability, and hybrid workflows, making it suitable for
+    large-scale algorithm development and long-term quantum software
+    engineering [14].
+  SELECTION PRINCIPLE: the textbook explicitly frames this as "choosing the
+  right tool for the task," distinguishing educational/learning purposes,
+  algorithm research and prototyping, experimental/hardware-oriented
+  research, and industry/cloud deployment [14]. Cite that framing when you
+  justify your pick — it shows the decision was reasoned, not arbitrary.
+
+LAYER E — QUALITY CONTROL / TEST TOOLING
+  - Unit and integration tests: pytest (Python).
+  - Property-based testing: Hypothesis — generates many inputs to probe
+    invariants rather than hand-picked cases. <<VERIFY exact version>>
+  - Coverage measurement: coverage.py, reported per sprint.
+  - Static analysis / linting and type checking: ruff or flake8, plus mypy.
+  - Continuous integration: GitHub Actions running the full suite on every
+    push, so the Definition of Done is enforced by a machine, not by memory.
+  - Randomness quality checks on generated key material: NIST SP 800-22
+    statistical test suite for random and pseudorandom number generators for
+    cryptographic applications <<VERIFY revision and date before citing>>.
+  - Standardized test process and documentation structure: ISO/IEC/IEEE
+    29119, especially Part 6 (guidelines for use of 29119 in Agile projects)
+    and Part 11 (testing of AI-based systems) [9][10].
+
+LAYER F — AI MODELS AS RESEARCH INSTRUMENTS (not as authors)
+  Used for four bounded tasks only — literature triage, code review, test-case
+  brainstorming, and explanation checking. Every output passes a verification
+  gate before entering the repository. Full protocol in Section 6, Phase 5.
+
+WHERE THIS "FITS" IN COMPUTER NETWORKING:
+  It sits in the research-and-development pipeline that produces networking
+  knowledge. The poster's claim is that for emerging network technologies —
+  where hardware is expensive or unavailable — SIMULATION IS THE PRIMARY
+  EXPERIMENTAL METHOD, and therefore the quality of the simulation SOFTWARE
+  PROCESS directly determines the quality of the networking knowledge
+  produced. One of the surveyed simulators exists specifically because
+  "there is a lack of validation methods for existing quantum network
+  simulations" [12]. That is a software-quality problem stated by the
+  quantum networking community itself.
+
+
+================================================================================
+6. HOW IT WORKS — THE PROCESS MECHANISM AND WORKFLOW
+================================================================================
+
+This is a workflow, not a glossary. Phases 1–6 describe one full cycle; the
+cycle repeats every sprint.
+
+--------------------------------------------------------------------------------
+PHASE 1 — PRODUCT GOAL AND INITIAL PRODUCT BACKLOG (once, before Sprint 1)
+--------------------------------------------------------------------------------
+PRODUCT GOAL (the commitment the Product Backlog serves):
+  "A reproducible simulation that measures secret-key rate and QBER for a
+   BB84 link, delivers keys through an ETSI-style REST interface, derives a
+   hybrid session key combining QKD-sourced and ML-KEM-sourced secrets, and
+   reports which of its behaviors are verified against analytical bounds."
+
+INITIAL PRODUCT BACKLOG (ordered; each item written as a testable outcome):
+  P1  Simulate BB84 over a lossless channel and produce a sifted key.
+  P2  Confirm sifting ratio converges to the expected ~1/2 for random
+      independent basis choices.
+  P3  Add configurable channel loss; measure raw key rate versus loss.
+  P4  Add a noise model; measure QBER; confirm QBER responds to the noise
+      parameter monotonically.
+  P5  Add an intercept-resend eavesdropper; confirm QBER rises measurably
+      when the eavesdropper is active.
+  P6  Implement error reconciliation; confirm both endpoints hold identical
+      strings afterward.
+  P7  Implement privacy amplification; confirm output length shrinks as QBER
+      rises and reaches zero above the protocol's security threshold.
+  P8  Expose keys through a local REST endpoint matching the ETSI GS QKD 014
+      shapes (status, enc_keys, dec_keys; JSON key container with key_ID).
+  P9  Implement key-pool exhaustion behavior returning the correct HTTP
+      error rather than reusing key material.
+  P10 Integrate liboqs ML-KEM and derive a hybrid session key from QKD key
+      material plus the ML-KEM shared secret.
+  P11 Confirm the hybrid property: changing ANY single contributing secret
+      changes the final session key.
+  P12 Produce reproducible result figures tagged with seed and commit hash.
+
+NOTE ON BACKLOG ORDERING: items are ordered so that EVERY prefix of the list
+is a working system. That ordering decision is what makes the project
+incremental rather than merely chunked.
+
+--------------------------------------------------------------------------------
+PHASE 2 — SPRINT PLANNING (start of each sprint)
+--------------------------------------------------------------------------------
+Three questions, answered in writing and committed to the repository:
+  (a) WHY is this Sprint valuable? -> one-sentence SPRINT GOAL.
+  (b) WHAT can be Done this Sprint? -> selected Product Backlog items.
+  (c) HOW will the work get done? -> the plan, which together with (a) and
+      (b) forms the Sprint Backlog [3].
+SOLO DISCIPLINE RULE: the Sprint Goal is written BEFORE any code is opened,
+and is not edited mid-sprint. If it turns out to be wrong, that becomes a
+Retrospective finding — which is data — rather than a silent rewrite, which
+is self-deception.
+
+--------------------------------------------------------------------------------
+PHASE 3 — DAILY SCRUM (15 minutes, every working day)
+--------------------------------------------------------------------------------
+Solo version: a three-line dated entry appended to SPRINT_LOG.md —
+  (1) progress toward the Sprint Goal since yesterday;
+  (2) plan for today;
+  (3) impediments.
+WHY THIS MATTERS FOR A STUDENT: this log is the single most useful artifact
+at Sprint Review and in the GitHub repository. It is also direct evidence of
+process, which is what the "Poster Organization, Clarity & Professional
+Quality" and "GitHub / YouTube / LinkedIn Professional Integration" criteria
+reward [2].
+
+--------------------------------------------------------------------------------
+PHASE 4 — BUILDING THE INCREMENT, UNDER THE DEFINITION OF DONE
+--------------------------------------------------------------------------------
+DEFINITION OF DONE (copy this verbatim into the repository as DoD.md; an item
+is NOT part of the Increment unless every line is true) [3]:
+
+  [ ] Code runs end-to-end from a single documented command.
+  [ ] Unit tests exist for every new public function.
+  [ ] At least one PROPERTY or METAMORPHIC test exists for every new
+      probabilistic behavior.
+  [ ] Any analytically predictable behavior is asserted against its
+      analytical value, not against a hard-coded output captured from a
+      previous run.
+  [ ] Full test suite passes in CI on a clean checkout.
+  [ ] The RNG seed is explicit and recorded; the run is reproducible.
+  [ ] Dependency versions are pinned.
+  [ ] Any AI-assisted content is marked in the commit message and has passed
+      the Phase 5 verification gate.
+  [ ] Every factual claim added to documentation carries a citation to a
+      primary source, not to an AI summary [2].
+  [ ] README updated so a stranger can reproduce the result.
+
+WHY THE DoD IS THE LOAD-BEARING ARTIFACT HERE: in a solo project with AI
+assistance, it is trivially easy to generate 400 lines of plausible code in
+two minutes and feel productive. The DoD is the only mechanism that converts
+"generated" into "delivered."
+
+--------------------------------------------------------------------------------
+PHASE 5 — THE AI VERIFICATION GATE (the novel process contribution)
+--------------------------------------------------------------------------------
+AI models are used for FOUR bounded tasks, each with a mandatory verification
+step and a logged record. The governing constraint is the course policy: AI
+may assist but does not replace scholarly or authoritative sources, and the
+project must not be based primarily on AI-generated summaries [2].
+
+ TASK                    | AI ROLE            | MANDATORY VERIFICATION
+ ------------------------|--------------------|------------------------------
+ 1. LITERATURE TRIAGE    | Suggest candidate  | EVERY suggested reference is
+                         | papers, standards, | opened at its DOI or the
+                         | and search terms   | issuing body's site and
+                         |                    | confirmed to exist with the
+                         |                    | stated authors, venue, year,
+                         |                    | and claim. Unverified entries
+                         |                    | are DELETED, not softened.
+                         |                    | Fabricated citations are the
+                         |                    | highest-frequency AI failure
+                         |                    | in student research.
+ ------------------------|--------------------|------------------------------
+ 2. CODE REVIEW          | Critique a diff;   | Every AI criticism is
+    (review, not author) | propose edge cases | converted into a TEST. If the
+                         | and failure modes  | test passes, the criticism
+                         |                    | was wrong and is discarded.
+                         |                    | If it fails, a real bug was
+                         |                    | found. The test — not the AI
+                         |                    | opinion — is the artifact.
+ ------------------------|--------------------|------------------------------
+ 3. TEST-CASE            | Enumerate boundary | Candidate cases are kept only
+    BRAINSTORMING        | conditions and     | if a human can state WHY the
+                         | metamorphic        | expected result is correct
+                         | relations          | from theory. "The AI said so"
+                         |                    | is never an oracle.
+ ------------------------|--------------------|------------------------------
+ 4. EXPLANATION CHECKING | Explain back the   | Used to find gaps in the
+                         | student's own      | student's understanding, then
+                         | draft explanation  | each gap is resolved against
+                         | and flag           | a primary source — ETSI, IETF,
+                         | ambiguities        | NIST, IEEE, or the textbook.
+
+HARD PROHIBITIONS (state these on the poster — they strengthen it):
+  - AI output is never committed without being read line by line.
+  - AI is never the source of a numeric result. All numbers come from
+    executed code.
+  - AI is never cited as a reference.
+  - AI is never used to generate the cryptographic core; standardized,
+    maintained implementations are used instead [5][6].
+
+LOGGING: AI_USAGE_LOG.md records, per entry: date, model used, task category
+(1–4 above), what was asked, what was returned, what was verified, and what
+was rejected. This log is a deliverable, and it is the cleanest possible
+answer if anyone questions academic integrity.
+
+ALIGNMENT WITH STANDARDS: ISO/IEC/IEEE 29119-11 addresses testing of
+AI-based systems and is the natural reference point for teams formalizing
+this kind of gate [9][10]. <<VERIFY the exact scope and publication year of
+Part 11 before citing it as a direct requirement — confirm at
+softwaretestingstandard.org or ISO.>>
+
+--------------------------------------------------------------------------------
+PHASE 6 — SPRINT REVIEW AND RETROSPECTIVE
+--------------------------------------------------------------------------------
+SPRINT REVIEW: demonstrate the RUNNING increment — not slides — to the
+faculty sponsor or a peer. Collect feedback and reorder the Product Backlog
+accordingly. A demonstration that cannot be run live did not happen.
+
+SPRINT RETROSPECTIVE: inspect the PROCESS, not the product. Record one
+concrete improvement to carry into the next sprint. Sample realistic
+retrospective findings for this project (replace with your own):
+  <<YOUR DATA — e.g., "Sprint 2: QBER test was flaky because the seed was not
+  fixed; action: all stochastic tests now take an explicit seed.">>
+  <<YOUR DATA — e.g., "Sprint 3: lost two days to an OQS algorithm-name
+  change; action: pin the container digest, not the tag.">>
+
+--------------------------------------------------------------------------------
+PHASE 7 — THE RESULTING INCREMENT LADDER (the concrete deliverable sequence)
+--------------------------------------------------------------------------------
+ INCR | SPRINT GOAL                        | WORKING CAPABILITY AT END
+ -----|------------------------------------|---------------------------------
+  I1  | Prove the toolchain and the loop   | BB84 over an ideal channel;
+      |                                    | sifted key printed; CI green
+ -----|------------------------------------|---------------------------------
+  I2  | Make the channel physical          | Loss + noise models; key rate and
+      |                                    | QBER measured and plotted
+ -----|------------------------------------|---------------------------------
+  I3  | Make security observable           | Intercept-resend eavesdropper;
+      |                                    | QBER rise demonstrated
+ -----|------------------------------------|---------------------------------
+  I4  | Turn raw bits into usable key      | Reconciliation + privacy
+      |                                    | amplification; identical keys at
+      |                                    | both ends
+ -----|------------------------------------|---------------------------------
+  I5  | Make the key a NETWORK SERVICE     | ETSI-style REST delivery with
+      |                                    | key_ID, JSON container, status
+      |                                    | codes, pool-exhaustion behavior
+ -----|------------------------------------|---------------------------------
+  I6  | Make it POST-QKD                   | liboqs ML-KEM integrated; hybrid
+      |                                    | session key derived from both
+      |                                    | sources; hybrid property tested
+ -----|------------------------------------|---------------------------------
+  I7  | Make it defensible                 | Reproducibility pack: seeds,
+      |                                    | pinned versions, figures tagged
+      |                                    | with commit hash, full test
+      |                                    | report, AI usage log
+
+EVERY ROW ABOVE IS DEMONSTRABLE ON ITS OWN. That is the entire argument for
+incremental development, shown rather than asserted.
+
+
+================================================================================
+7. PROCESS / SYSTEM DESIGN DIAGRAM
+================================================================================
+
+NOTE: The ASCII layout below is the SPECIFICATION for your original diagram.
+Redraw it in draw.io, Figma, or Visio. "Original Network / Technical Design &
+Visuals" is worth 20 points and ASCII art on a printed poster will not earn
+them [2].
+
+      *** INCREMENTAL SCRUM + AI-GATED ENGINEERING OF A POST-QKD SIMULATOR ***
+                (three loops: SPRINT loop / BUILD loop / VERIFY loop)
+
+  +==============================================================================+
+  |                        PRODUCT BACKLOG  (P1 ... P12)                         |
+  |              commitment: PRODUCT GOAL — reproducible post-QKD sim            |
+  +===============================+==============================================+
+                                  | (1) Sprint Planning: WHY / WHAT / HOW
+                                  v
+  +==============================================================================+
+  |                      SPRINT BACKLOG  (commitment: SPRINT GOAL)               |
+  +===============================+==============================================+
+                                  |
+            +---------------------+---------------------+
+            |            (2) DAILY SCRUM LOOP           |
+            |         SPRINT_LOG.md, 3 lines/day        |
+            |         progress / plan / impediment      |
+            +---------------------+---------------------+
+                                  v
+  ================================ BUILD LOOP ===================================
+                                  |
+   +------------------------------v------------------------------+
+   |                      SIMULATION UNDER TEST                   |
+   |                                                              |
+   |  +----------------+   +------------------+   +------------+  |
+   |  | QUANTUM LAYER  |-->| POST-PROCESSING  |-->| KEY POOL   |  |
+   |  | BB84 source,   |   | sifting ->       |   | (queue)    |  |
+   |  | channel loss,  |   | param. est. ->   |   | key_ID     |  |
+   |  | noise, QBER,   |   | reconciliation ->|   | index      |  |
+   |  | Eve (optional) |   | privacy amplif.  |   |            |  |
+   |  +----------------+   +------------------+   +-----+------+  |
+   |         ^ NetSquid / SeQUeNCe / QuNetSim           |         |
+   |                                                    v         |
+   |  +----------------------------------------------------------+|
+   |  | ETSI-STYLE REST KEY DELIVERY (local)                      ||
+   |  |  GET  /api/v1/keys/{slave_SAE_ID}/status                  ||
+   |  |  GET  /api/v1/keys/{slave_SAE_ID}/enc_keys -> {key_ID,key}||
+   |  |  POST /api/v1/keys/{master_SAE_ID}/dec_keys <- {key_ID}   ||
+   |  |  errors: 400 / 401 / 503(pool exhausted)                  ||
+   |  +-----------------------------+----------------------------+|
+   |                                v                             |
+   |  +----------------------------------------------------------+|
+   |  | HYBRID KEY SCHEDULE   (THE "POST-QKD" STEP)              ||
+   |  |  session_key = KDF( QKD_key  ||  ML-KEM_shared_secret )  ||
+   |  |  ML-KEM supplied by liboqs / oqs-provider                ||
+   |  |  INVARIANT: change ANY input -> session_key changes      ||
+   |  +----------------------------------------------------------+|
+   +------------------------------+-------------------------------+
+                                  |
+  =============================== VERIFY LOOP ===================================
+                                  v
+   +--------------------------------------------------------------+
+   |                    QUALITY CONTROL PIPELINE                   |
+   |                                                               |
+   |   L1 STATIC      : lint (ruff/flake8) + types (mypy)          |
+   |   L2 UNIT        : pytest, per-function                       |
+   |   L3 PROPERTY    : Hypothesis — invariants over many inputs   |
+   |   L4 METAMORPHIC : relations between runs (see Section 9)     |
+   |   L5 ANALYTICAL  : assert against theory, not against a saved |
+   |                    previous output                            |
+   |   L6 INTEGRATION : REST contract + end-to-end key agreement   |
+   |   L7 STATISTICAL : randomness checks on output key material   |
+   |                    (NIST SP 800-22 <<VERIFY>>)                |
+   |   L8 REPRODUCE   : clean checkout + fixed seed -> same figure |
+   +------------------------------+--------------------------------+
+                                  |
+                  PASS <----------+----------> FAIL
+                   |                              |
+                   v                              v
+         +-------------------+        +------------------------+
+         | DEFINITION OF DONE|        | NOT AN INCREMENT.      |
+         | satisfied ->      |        | Return to BUILD LOOP.  |
+         | INCREMENT         |        | No partial credit.     |
+         +---------+---------+        +------------------------+
+                   |
+                   v
+   +--------------------------------------------------------------+
+   |  (3) SPRINT REVIEW: demo the RUNNING increment to sponsor     |
+   |  (4) SPRINT RETROSPECTIVE: one process improvement recorded   |
+   +------------------------------+--------------------------------+
+                                  |
+                                  +--> feeds back into PRODUCT BACKLOG (top)
+
+
+  ---------------------- AI ASSISTANCE PLANE (side rail) ----------------------
+  Runs ALONGSIDE the build loop and NEVER writes directly into the repository.
+
+      [ AI MODEL ]
+           |
+           |  (a) literature triage   (b) code review
+           |  (c) test brainstorming  (d) explanation checking
+           v
+   +================================================================+
+   |              *** AI VERIFICATION GATE ***                      |
+   |  citation? -> open the DOI / issuing body. Not found -> DELETE |
+   |  criticism? -> convert to a TEST. Test decides, not the model. |
+   |  test idea? -> keep only if theory justifies the oracle        |
+   |  explanation? -> confirm against ETSI / IETF / NIST / IEEE     |
+   |  EVERY crossing logged in AI_USAGE_LOG.md                      |
+   +================================+===============================+
+                                    |  verified content only
+                                    v
+                            (into BUILD LOOP)
+
+
+  LEGEND / WHERE EACH PRACTICE OPERATES
+  -------------------------------------
+   (1)(3)(4) Scrum events — process control points.
+   (2)       Daily Scrum — the solo-developer substitute for team visibility.
+   BUILD LOOP   — where increments are produced.
+   VERIFY LOOP  — where quality control is ENFORCED BY MACHINE, not intent.
+   AI PLANE     — advisory only; separated by a hard verification boundary.
+   >> The critical design decision shown here is that the AI plane has NO
+      direct path into the repository. Every arrow from AI passes through the
+      gate. That separation is the poster's central process claim.
+
+
+================================================================================
+8. PROCESS-TO-LIFECYCLE AND STANDARDS MAPPING
+================================================================================
+
+A. WHERE EACH COURSE PROCESS MODEL ACTUALLY APPEARS IN THIS PROJECT
+   (the honest answer is "all of them, in different places")
+
+ PROCESS MODEL [1]        | WHERE IT IS USED HERE          | WHY THERE
+ -------------------------|--------------------------------|------------------
+ WATERFALL / PLAN-DRIVEN  | The external interface contract| Because ETSI
+                          | (ETSI REST shapes, key_ID      | GS QKD 014 is a
+                          | semantics) and the security    | published
+                          | requirements are fixed up      | standard [7]; you
+                          | front and not renegotiated.    | do not iterate on
+                          |                                | someone else's
+                          |                                | standard.
+ -------------------------|--------------------------------|------------------
+ INCREMENTAL DEVELOPMENT  | The simulator core: I1 -> I7,  | Requirements for
+                          | each a working system.         | the MODEL are
+                          |                                | discovered by
+                          |                                | running it.
+ -------------------------|--------------------------------|------------------
+ INTEGRATION AND          | Simulator engine + liboqs +     | Reimplementing
+ CONFIGURATION            | REST framework + test tooling   | ML-KEM would be
+                          | are reused, not written.        | slower AND less
+                          |                                 | trustworthy
+                          |                                 | [5][6].
+ -------------------------|--------------------------------|------------------
+ AGILE                    | Sprint cadence, backlog         | Requirements DO
+                          | reordering, retrospectives,     | change — tool
+                          | response to tool changes.       | renames, scope
+                          |                                 | discoveries [8].
+ -------------------------|--------------------------------|------------------
+
+   >> POSTER TAKEAWAY SENTENCE: "This project is not an Agile project. It is a
+      HYBRID project — plan-driven at the standards boundary, incremental in
+      the core, integration-based in the toolchain — exactly as the course
+      material predicts: 'most practical processes include elements of both
+      plan-driven and agile approaches' [1]."
+
+B. SCRUM ELEMENTS -> PROJECT ARTIFACTS (one-to-one, auditable)
+
+ SCRUM ELEMENT [3]     | CONCRETE ARTIFACT IN THE GITHUB REPOSITORY
+ ----------------------|-----------------------------------------------------
+ Product Goal          | README.md, "Product Goal" section
+ Product Backlog       | GitHub Issues, ordered, labeled P1..P12
+ Sprint Goal           | SPRINT_n/GOAL.md — written before coding begins
+ Sprint Backlog        | GitHub Project board column for the sprint
+ Daily Scrum           | SPRINT_LOG.md — dated three-line entries
+ Increment             | A tagged release per sprint (v0.1 ... v0.7)
+ Definition of Done    | DoD.md — enforced by the CI workflow
+ Sprint Review         | SPRINT_n/REVIEW.md + demo recording
+ Sprint Retrospective  | SPRINT_n/RETRO.md — one improvement, carried forward
+
+   >> This table is the fastest way to prove on a poster that Scrum was
+      actually practiced rather than merely described.
+
+C. QUALITY CONTROL -> ISO/IEC/IEEE 29119 MAPPING
+
+ 29119 PART [9][10]                        | USE IN THIS PROJECT
+ ------------------------------------------|---------------------------------
+ Part 1: Concepts and definitions           | Shared vocabulary; distinguishes
+                                            | verification from validation
+ Part 2: Test processes                     | Organizational / management /
+                                            | dynamic test process structure
+ Part 3: Test documentation                 | Templates for Test Plan, Test
+                                            | Status, Test Completion reports
+ Part 4: Test techniques                    | Boundary-value and equivalence
+                                            | partitioning for loss/QBER
+                                            | parameter sweeps
+ Part 5: Keyword-driven testing             | Optional; parameter-table-driven
+                                            | sweep definitions
+ Part 6: Guidelines for use of 29119 in     | DIRECTLY RELEVANT — reconciles
+          Agile projects                    | standardized testing with sprint
+                                            | cadence
+ Part 11: Testing of AI-based systems       | DIRECTLY RELEVANT — reference
+                                            | point for the AI verification
+                                            | gate in Section 6 Phase 5
+          <<VERIFY the publication years and current revision numbers for each
+            part at softwaretestingstandard.org or ISO before printing.>>
+
+D. TEST LEVELS -> NETWORK STACK TOUCHPOINTS (ties this poster to CN1)
+
+ TEST LEVEL        | WHAT IT EXERCISES          | STACK TOUCHPOINT
+ ------------------|----------------------------|-------------------------
+ Unit              | Basis selection, sifting   | Protocol logic
+ Property          | Sifting ratio, key length  | Protocol invariants
+ Metamorphic       | Loss up -> key rate down   | Physical-layer behavior
+ Analytical        | QBER threshold behavior    | Security parameter
+ Integration (REST)| Key delivery contract      | Application layer (L7)
+ End-to-end        | Both endpoints agree       | Full key-establishment path
+ Statistical       | Output key randomness      | Cryptographic quality
+ Load              | Key-pool exhaustion        | Queuing / availability
+
+
+================================================================================
+9. QUALITY CONTROL AND TESTING — THE TECHNICAL CORE
+================================================================================
+
+This section exists because the hardest problem in simulating a stochastic
+security protocol is not writing it — it is KNOWING WHETHER IT IS RIGHT.
+
+--------------------------------------------------------------------------------
+9.1 THE ORACLE PROBLEM, STATED PLAINLY
+--------------------------------------------------------------------------------
+Every run of a BB84 simulation produces a DIFFERENT key. You cannot assert
+`assert key == expected_key`. Comparing against a previously saved output is
+also invalid, because it only proves the code still does what it did before —
+including, if it was wrong, continuing to be wrong. Three oracle strategies
+solve this.
+
+--------------------------------------------------------------------------------
+9.2 ORACLE TYPE 1 — ANALYTICAL BOUNDS (strongest; use wherever possible)
+--------------------------------------------------------------------------------
+Assert against values that THEORY predicts, independent of your code.
+
+ PROPERTY                      | ANALYTICAL EXPECTATION      | TEST FORM
+ ------------------------------|-----------------------------|---------------
+ Sifting ratio (BB84, two      | ~1/2 of detected events     | statistical
+ randomly and independently    | survive basis matching      | assertion over
+ chosen bases)                 |                             | many trials
+ ------------------------------|-----------------------------|---------------
+ QBER on a noiseless, Eve-free | ~0                          | tight bound
+ channel                       |                             |
+ ------------------------------|-----------------------------|---------------
+ QBER with intercept-resend    | must rise MEASURABLY and    | comparative
+ eavesdropper active           | significantly above the     | assertion vs.
+                               | no-Eve baseline             | control run
+ ------------------------------|-----------------------------|---------------
+ Final key length vs. QBER     | monotonically decreasing;   | monotonicity
+                               | reaches zero at/above the   | test + cutoff
+                               | protocol's security         | test
+                               | threshold                   |
+ ------------------------------|-----------------------------|---------------
+ Key agreement after           | endpoints identical,        | exact equality
+ reconciliation                | bit-for-bit                 | assertion
+
+ <<VERIFY before printing any specific numeric QBER threshold: cite the
+   security-analysis source you actually read and quote its stated
+   assumptions (protocol variant, one-way vs. two-way reconciliation,
+   asymptotic vs. finite-key regime). Do NOT print a bare percentage with no
+   stated regime — that is the kind of unsupported claim the rubric's
+   "Emerging Technology Research & Technical Accuracy" criterion penalizes.>>
+
+STATISTICAL TESTING DISCIPLINE: because these are stochastic quantities, each
+assertion must specify sample size and tolerance, and tests must use a FIXED
+SEED so failures are reproducible. A flaky test is worse than no test — it
+trains you to ignore red builds.
+
+--------------------------------------------------------------------------------
+9.3 ORACLE TYPE 2 — METAMORPHIC TESTING (for when no absolute value is known)
+--------------------------------------------------------------------------------
+Metamorphic testing asserts RELATIONS BETWEEN RUNS rather than absolute
+outputs. This is the key technique for simulation validation.
+
+ METAMORPHIC RELATION (MR)                               | WHY IT MUST HOLD
+ --------------------------------------------------------|------------------
+ MR1: increase channel loss -> secret key rate must not   | Physics: fewer
+      increase                                            | detections
+ --------------------------------------------------------|------------------
+ MR2: increase noise parameter -> QBER must not decrease  | Definition of
+                                                          | noise
+ --------------------------------------------------------|------------------
+ MR3: enable eavesdropper -> QBER must not decrease       | Measurement
+                                                          | disturbance
+ --------------------------------------------------------|------------------
+ MR4: double the number of transmitted pulses -> raw key  | Linearity in
+      length approximately doubles (same parameters)      | trial count
+ --------------------------------------------------------|------------------
+ MR5: same seed + same parameters -> byte-identical       | Determinism
+      output                                              | under seeding
+ --------------------------------------------------------|------------------
+ MR6: different seed, same parameters -> different key,   | Correct use of
+      same statistical behavior                           | randomness
+ --------------------------------------------------------|------------------
+ MR7 (HYBRID / POST-QKD): change ONLY the QKD key input   | Hybrid security
+      -> session key changes. Change ONLY the ML-KEM      | property: the
+      secret -> session key changes. This is the          | session key must
+      executable form of the defense-in-depth claim.      | depend on BOTH
+
+MR7 IS THE MOST IMPORTANT TEST IN THE ENTIRE PROJECT. It is the difference
+between claiming a hybrid design and demonstrating one. Put it on the poster.
+
+--------------------------------------------------------------------------------
+9.4 ORACLE TYPE 3 — DIFFERENTIAL / CROSS-IMPLEMENTATION TESTING
+--------------------------------------------------------------------------------
+Where a reference implementation exists, compare against it rather than
+trusting your own. liboqs explicitly provides "a test harness and benchmarking
+routines" alongside its algorithm implementations [6] — use them. For the
+PQC portion, your code should never be the authority on correctness; the
+maintained library is.
+LIMITATION TO STATE HONESTLY: for the QKD portion there is no single
+authoritative reference implementation to diff against, which is precisely
+why Oracle Types 1 and 2 carry the load there — and why the community notes a
+"lack of validation methods for existing quantum network simulations" [12].
+
+--------------------------------------------------------------------------------
+9.5 THE TEST PYRAMID AS APPLIED HERE
+--------------------------------------------------------------------------------
+        /\          L8  REPRODUCIBILITY   (1 test: clean checkout -> same fig)
+       /  \         L7  STATISTICAL       (few: randomness of output keys)
+      /    \        L6  END-TO-END        (few: full key establishment)
+     /      \       L5  INTEGRATION       (some: REST contract, pool states)
+    /        \      L4  METAMORPHIC       (many: MR1-MR7)
+   /          \     L3  PROPERTY          (many: invariants, Hypothesis)
+  /____________\    L2  UNIT              (most: every public function)
+                    L1  STATIC            (always: lint + types, pre-commit)
+
+RATIONALE: the unusual feature of this pyramid is how WIDE the metamorphic
+band is. In ordinary application software that band barely exists. In
+stochastic scientific software it does most of the real validation work.
+
+--------------------------------------------------------------------------------
+9.6 CONTINUOUS INTEGRATION AS THE ENFORCER
+--------------------------------------------------------------------------------
+GitHub Actions runs L1–L6 on every push and L7–L8 nightly or per release tag.
+WHY THIS MATTERS SPECIFICALLY FOR A SOLO SCRUM PROJECT: the Definition of Done
+is a promise you make to yourself, and promises made to oneself under deadline
+pressure are not reliable. CI converts the DoD from an intention into a gate
+that cannot be bypassed without a visible, recorded act.
+
+--------------------------------------------------------------------------------
+9.7 REPRODUCIBILITY PACK (the deliverable that makes results defensible)
+--------------------------------------------------------------------------------
+  [ ] requirements.txt / environment.yml with PINNED versions
+  [ ] Container image pinned BY DIGEST, not by tag — tags move, and the OQS
+      `kyber768` -> `mlkem768` rename is the cautionary example [8]
+  [ ] seeds.json recording the RNG seed behind every published figure
+  [ ] Each figure filename or caption carries the git commit hash
+  [ ] RESULTS.md stating, for each claim: the command, the seed, the raw
+      output, and the interpretation
+  [ ] A one-command reproduce script (`make reproduce`)
+
+--------------------------------------------------------------------------------
+9.8 QUALITY METRICS TO REPORT PER SPRINT (fill with YOUR real numbers)
+--------------------------------------------------------------------------------
+ METRIC                          | S1 | S2 | S3 | S4 | S5 | S6 | S7
+ --------------------------------|----|----|----|----|----|----|----
+ Backlog items Done              |<<YOUR DATA>>
+ Line coverage %                 |<<YOUR DATA>>
+ Number of metamorphic relations |<<YOUR DATA>>
+ Defects found by tests          |<<YOUR DATA>>
+ Defects found by AI review that |<<YOUR DATA>>
+   were CONFIRMED by a test      |
+ AI suggestions REJECTED after   |<<YOUR DATA>>
+   verification                  |
+ CI pass rate on first push %    |<<YOUR DATA>>
+
+THE MOST INTERESTING ROW ON THIS POSTER IS "AI SUGGESTIONS REJECTED." A
+nonzero, honestly reported rejection count is powerful evidence of genuine
+critical engagement, and it is the single easiest way to demonstrate the
+course's critical-thinking standard [2]. Do not round it down.
+
+
+================================================================================
+10. BENEFITS
+================================================================================
+
+B1. A WORKING SYSTEM EXISTS FROM SPRINT 1 ONWARD.
+    Because the backlog is ordered so that every prefix runs, the project is
+    never in a state of "nothing to show." WHY IT MATTERS: it eliminates the
+    dominant failure mode of semester research projects — an all-or-nothing
+    integration at the deadline. It also means a demo is always possible at
+    Sprint Review, which is what Scrum requires of an Increment: usable, and
+    additive to all prior Increments [3].
+
+B2. CORRECTNESS IS MEASURED, NOT ASSUMED.
+    Analytical and metamorphic oracles mean the simulator's claims are
+    checkable by a third party. WHY IT MATTERS: the poster can state which
+    behaviors are VERIFIED and which are merely IMPLEMENTED — a distinction
+    almost no student poster makes, and one the critical-thinking standard
+    explicitly asks for in the form "WHAT evidence supports the claim?" [2].
+
+B3. CHANGE IS ABSORBED INSTEAD OF DERAILING THE PROJECT.
+    When an upstream tool renames algorithms mid-project [8], an incremental
+    process reorders the backlog and continues. A plan-driven schedule would
+    have to be rewritten. WHY IT MATTERS: this domain changes faster than a
+    semester, so adaptability is a functional requirement, not a preference.
+
+B4. AI ACCELERATES THE PROJECT WITHOUT CONTAMINATING IT.
+    Bounding AI to four advisory tasks behind a verification gate captures the
+    speed benefit — faster literature triage, more edge cases considered —
+    while keeping the authoritative content sourced from ETSI, IETF, NIST, and
+    IEEE material, as course policy requires [2]. WHY IT MATTERS: it is a
+    reusable answer to "how should students use AI in research," stated as a
+    process rather than as a vague ethic.
+
+B5. REUSE BEATS REIMPLEMENTATION FOR CRYPTOGRAPHY.
+    Using liboqs rather than hand-rolling ML-KEM yields a maintained, tested,
+    standardized implementation with its own test harness [5][6]. WHY IT
+    MATTERS: student-written cryptography is a known source of subtle,
+    invisible error. Choosing not to write it is an engineering judgment worth
+    defending aloud.
+
+B6. THE PROCESS PRODUCES ITS OWN EVIDENCE.
+    Sprint logs, tagged releases, CI history, the AI usage log, and the
+    reproducibility pack are generated as a BY-PRODUCT of working correctly.
+    WHY IT MATTERS: they directly satisfy the GitHub repository and
+    professional-integration requirements, which call for the poster,
+    abstract, diagrams, references, and appropriate project artifacts [2].
+
+B7. TRANSFERABILITY.
+    Nothing in this process is specific to QKD. The same structure applies to
+    any simulation-based networking research where hardware is unavailable.
+    WHY IT MATTERS: it elevates the poster from "I built a thing" to "here is
+    a method others can adopt," which is what "From Building to Innovation"
+    asks for.
+
+
+================================================================================
+11. LIMITATIONS / CHALLENGES
+================================================================================
+
+L1. SCRUM WITH ONE PERSON IS NOT SCRUM.
+    Scrum defines three accountabilities and relies on multiple people
+    inspecting and challenging each other [3]. A solo student holding all
+    three roles loses the independent-challenge function entirely. Automated
+    CI and sponsor review are partial substitutes, not equivalents. STATE
+    THIS EXPLICITLY — claiming full Scrum fidelity solo is the most likely
+    technical inaccuracy on a poster of this type.
+
+L2. PROCESS OVERHEAD IS REAL AND MEASURABLE.
+    Writing sprint goals, maintaining logs, building tests, and verifying AI
+    output consumes time that is not spent producing features. For very small
+    or very short projects the overhead may exceed the benefit. Report your
+    actual overhead honestly: <<YOUR DATA — estimated % of total hours spent
+    on process artifacts vs. implementation>>.
+
+L3. A VALIDATED SIMULATION IS STILL NOT HARDWARE.
+    Passing every test means the model behaves as the model should. It does
+    not mean the model matches a real optical link. Simulators differ sharply
+    in realism: SimulaQron does not aim at realistic physical models of
+    channels and devices; QuNetSim focuses on upper layers and leaves the
+    physical layer unspecified; SQUANCH offers configurable physical-layer
+    error models but does not accurately track time [12][13]. Whichever you
+    choose, its abstractions bound your conclusions. Name the specific
+    limitation of YOUR chosen simulator on the poster.
+
+L4. THE ORACLE PROBLEM IS ONLY MITIGATED, NOT SOLVED.
+    Metamorphic relations catch broken relationships but can miss a model that
+    is uniformly, consistently wrong in the same direction. If your noise
+    model is physically misspecified, MR1–MR6 may all pass. The honest claim
+    is "internally consistent and consistent with known analytical bounds,"
+    not "correct."
+
+L5. NO INDEPENDENT CODE REVIEW.
+    AI review is not peer review. It has no stake, no accountability, and no
+    memory of your design intent. It generates plausible criticism, including
+    plausible WRONG criticism — which is precisely why the process converts
+    every criticism into a test rather than into a code change.
+
+L6. AI VERIFICATION IS LABOR-INTENSIVE AND EASY TO SKIP UNDER DEADLINE.
+    The gate only works if it is actually applied. Its weakest moment is the
+    last week of the semester. The mitigation is structural: CI blocks merges,
+    and the DoD requires the AI log entry — but a determined student can
+    bypass their own rules. Acknowledge this honestly.
+
+L7. TOOLCHAIN FRAGILITY AND VERSION DRIFT.
+    Specialized research tooling breaks. Algorithm naming changes across
+    releases are a documented, concrete instance [8]. Pinning by digest
+    mitigates but does not eliminate this; it also means you may be running a
+    version with known fixed bugs.
+
+L8. LEARNING CURVE COST.
+    Quantum network simulators and quantum programming frameworks are not
+    beginner tools. The textbook notes Cirq's "steeper learning curve," that
+    it is "less beginner-friendly than Qiskit," and that it has "limited
+    high-level algorithm libraries" and "hardware-specific abstractions
+    [that] reduce portability" [14]. Tool selection is therefore partly a
+    schedule-risk decision, not purely a technical one.
+
+L9. SCOPE CREEP IS THE NATIVE DISEASE OF INTERESTING PROJECTS.
+    Post-QKD research constantly suggests a next feature — MDI-QKD, decoy
+    states, trusted-node chains, satellite links. The time-box is the only
+    defense, and it works only if the Sprint Goal is treated as fixed.
+
+L10. GENERALIZABILITY OF THE PROCESS CLAIM IS UNPROVEN.
+    A single-student, single-semester, single-project experience is an
+    existence proof, not evidence of general effectiveness. Do not claim this
+    process is better than alternatives — claim that it was applied, and
+    report what it produced.
+
+
+================================================================================
+12. CURRENT STATUS — CLASSIFICATION AND JUSTIFICATION
+================================================================================
+
+Classify each component separately. A single label would hide the real
+picture, and the rubric asks you to "distinguish established/deployed
+technology from emerging, experimental, or speculative ideas" [2].
+
+ COMPONENT                                  | STATUS          | EVIDENCE
+ -------------------------------------------|-----------------|------------
+ Scrum framework                            | DEPLOYED /      | Scrum Guide,
+                                             | MATURE,         | Nov 2020
+                                             | industry        | version;
+                                             | standard        | Scrum
+                                             |                 | defined and
+                                             |                 | maintained
+                                             |                 | since the
+                                             |                 | early 1990s
+                                             |                 | [3]
+ -------------------------------------------|-----------------|------------
+ Incremental / agile / plan-driven /         | ESTABLISHED     | Core course
+ integration-and-configuration process       | TEXTBOOK        | material [1]
+ models                                      | KNOWLEDGE       |
+ -------------------------------------------|-----------------|------------
+ ISO/IEC/IEEE 29119 testing standard         | PUBLISHED       | Parts 1–6,
+ (Parts 1–6, 11, 13)                         | STANDARD        | 11, 13 listed
+                                             |                 | [9][10]
+ -------------------------------------------|-----------------|------------
+ 29119-11 testing of AI-based systems        | PUBLISHED but   | Listed as a
+                                             | EMERGING in     | part of the
+                                             | practice        | series [9]
+                                             | <<VERIFY year>> |
+ -------------------------------------------|-----------------|------------
+ Open Quantum Safe liboqs / oqs-provider     | MATURE          | Linux
+                                             | OPEN-SOURCE     | Foundation
+                                             | PROTOTYPE       | PQCA project;
+                                             | TOOLING         | ML-KEM at
+                                             | (explicitly for | Tier 1 Core,
+                                             | prototyping and | actively
+                                             | experimenting)  | maintained;
+                                             |                 | note liboqs'
+                                             |                 | own stated
+                                             |                 | limitations
+                                             |                 | on intended
+                                             |                 | use [5][6]
+ -------------------------------------------|-----------------|------------
+ ML-KEM algorithm itself                     | STANDARDIZED    | "Standardized
+                                             | BY NIST         | by NIST" per
+                                             |                 | liboqs
+                                             |                 | algorithm
+                                             |                 | table [6]
+ -------------------------------------------|-----------------|------------
+ Quantum network simulators (NetSquid,       | EMERGING /      | Actively
+ SeQUeNCe, QuNetSim, SimulaQron, SQUANCH,    | ACTIVE RESEARCH | developed
+ QuISP, SimQN)                               | TOOLING         | 2018–2024;
+                                             |                 | "features are
+                                             |                 | often added
+                                             |                 | on a daily
+                                             |                 | basis, making
+                                             |                 | comparisons
+                                             |                 | quickly
+                                             |                 | obsolete"
+                                             |                 | [12][13]
+ -------------------------------------------|-----------------|------------
+ Validation methodology for quantum network  | MOSTLY RESEARCH | A simulator
+ simulations                                 | / OPEN PROBLEM  | was built
+                                             |                 | specifically
+                                             |                 | to "address
+                                             |                 | the lack of
+                                             |                 | validation
+                                             |                 | methods for
+                                             |                 | existing
+                                             |                 | quantum
+                                             |                 | network
+                                             |                 | simulations"
+                                             |                 | [12]
+ -------------------------------------------|-----------------|------------
+ Formal process for AI-assisted academic     | EMERGING /      | Course policy
+ research with verification gates            | NOT             | exists [2];
+                                             | STANDARDIZED    | generalized
+                                             |                 | standardized
+                                             |                 | practice does
+                                             |                 | not
+ -------------------------------------------|-----------------|------------
+ Hybrid QKD + PQC itself                     | EMERGING,       | "Gaining
+                                             | short-term      | traction as a
+                                             | horizon         | practical
+                                             |                 | approach";
+                                             |                 | severity
+                                             |                 | Medium;
+                                             |                 | "Short term
+                                             |                 | (1–3 years)
+                                             |                 | for hybrid
+                                             |                 | solutions"
+                                             |                 | [4]
+
+OVERALL CLASSIFICATION FOR THE POSTER:
+"The PROCESS components are mature and industry-standard. The TOOLING is
+ emerging and changes rapidly. The SUBJECT (hybrid QKD+PQC) is emerging with
+ a short-term practical horizon. The genuinely OPEN problem — and the one
+ this project engages directly — is VALIDATION: how to know a quantum network
+ simulation is right."
+
+THAT FINAL SENTENCE IS THE STRONGEST CLAIM ON THIS POSTER. It identifies a
+real open problem, documented by the research community itself [12], and
+positions the work against it honestly without overclaiming a solution.
+
+
+================================================================================
+13. FUTURE IMPACT (5–15 YEARS)
+================================================================================
+
+NEAR TERM (1–3 YEARS) — AI-assisted engineering becomes governed, not banned.
+  Expect institutions to move from informal AI policies to explicit,
+  auditable protocols resembling the verification gate in Section 6: logged
+  usage, mandatory source verification, AI excluded from authoritative
+  content. The existence of a standards part addressing testing of AI-based
+  systems [9] signals that formalization is already underway. For students,
+  the practical consequence is that AI USAGE LOGS become as ordinary a
+  deliverable as a bibliography. In parallel, hybrid QKD+PQC itself is
+  expected to mature on a short-term horizon of 1–3 years [4], meaning the
+  subject matter of this simulation will move from research into early
+  engineering within a typical degree program's span.
+
+MID TERM (3–7 YEARS) — simulation validation becomes a discipline.
+  As quantum networking moves from physics demonstration to engineering,
+  the question "is your simulator right?" will require a standardized
+  answer. Plausible developments: shared benchmark scenarios with published
+  reference outputs, cross-simulator differential testing as a norm, and
+  reproducibility packs expected with published results. The current state —
+  where simulator comparisons become "quickly obsolete" because features
+  change daily [13] — is unsustainable for engineering use and will be
+  pressured toward stability. The metamorphic-testing approach in Section 9
+  is a plausible component of such a methodology because it does not require
+  a reference implementation.
+
+LONGER TERM (7–15 YEARS) — the process, not the product, is the durable part.
+  The specific simulators, libraries, and model versions used in this project
+  will be obsolete. What will not be obsolete: ordering work so every prefix
+  runs, defining Done before starting, asserting against theory rather than
+  against saved output, separating advisory tools from authoritative sources,
+  and recording enough state that a stranger can reproduce a figure. If
+  quantum repeaters mature and end-to-end QKD becomes practical, the
+  simulation targets change completely — and this process still applies
+  unchanged. That transferability is the actual contribution.
+
+WHAT THIS MEANS FOR A STUDENT'S CAREER:
+  The differentiating professional skill in an AI-saturated field is not
+  producing output — models do that instantly — but VERIFYING output and
+  being able to show how it was verified. The artifacts this process
+  generates (test suites, reproducibility packs, verification logs) are
+  exactly the evidence that demonstrates that skill to an employer.
+
+
+================================================================================
+14. CONCLUSION
+================================================================================
+
+MOST IMPORTANT FINDING:
+For simulation-based research into emerging network technologies, the binding
+constraint on the quality of the knowledge produced is the quality of the
+SOFTWARE PROCESS — specifically, whether the work is ordered so that
+something always runs, and whether a real test oracle exists. Applying
+incremental development with time-boxed sprints produced a demonstrable
+working system at every stage; applying analytical and metamorphic oracles
+produced claims that a third party can check. Neither required new technology.
+Both required discipline, written down in advance.
+
+SECOND FINDING — ON PROCESS SELECTION:
+This project is a hybrid process, not an Agile one, and that is the correct
+outcome rather than a compromise. The external standards boundary is
+plan-driven because ETSI's specification is fixed [7]; the simulator core is
+incremental because its requirements are discovered by running it; the
+toolchain is integration-and-configuration because reimplementing
+standardized cryptography would be slower and less trustworthy [5][6]. This
+is exactly what the course material predicts: "most practical processes
+include elements of both plan-driven and agile approaches. There are no right
+or wrong software processes" [1].
+
+THIRD FINDING — ON AI:
+AI is a legitimate and genuinely useful research instrument when it is
+confined to advisory roles behind a verification gate, and a liability
+otherwise. The operational rule that makes the difference is simple and worth
+stating as the poster's closing line: AI MAY PROPOSE; ONLY A TEST OR A
+PRIMARY SOURCE MAY CONFIRM. Under that rule, a rejected AI suggestion is not
+wasted effort — it is the evidence that verification is actually happening.
+
+THE PRACTICAL TAKEAWAY:
+Build in increments that run. Define Done before you start. Assert against
+theory, never against yesterday's output. Keep AI outside the repository
+boundary. Record enough that a stranger can reproduce your figure. These five
+rules cost little, require no special tooling, and are the difference between
+a research artifact that can be defended and one that merely looks finished.
+
+
+================================================================================
+15. IEEE REFERENCES
+================================================================================
+
+NOTE ON CITATION DISCIPLINE: entries [1], [2], [4], [7], and [14] are your
+own attached course documents and are cited as such — complete the
+bibliographic details marked <<FILL>>. Entries [3], [5], [6], [8]–[13] were
+confirmed against live sources during preparation of this document; still
+open each one yourself and confirm the access date before printing. Anything
+marked <<VERIFY>> must be checked before it appears on the poster.
+
+[1]  "BLA 02 — Software Engineering: Software Process Models," course
+     material, <<FILL course number, instructor, institution>>, Fall 2026.
+     (Provided document: BLA_02_swe.txt.)
+
+[2]  V. Govindaswamy, "BLAST Poster, Abstract & Professional Sharing
+     Requirements — Future Networks Research & Innovation Poster," course
+     handout, Computer Networks, <<FILL institution>>, Fall 2026.
+
+[3]  K. Schwaber and J. Sutherland, "The Scrum Guide: The Definitive Guide to
+     Scrum — The Rules of the Game," Nov. 2020. [Online]. Available:
+     https://scrumguides.org/docs/scrumguide/v2020/2020-Scrum-Guide-US.pdf
+     [Accessed: <<FILL date>>].
+
+[4]  S. Kish, J. Pieprzyk, and S. Camtepe, "Quantum key distribution,"
+     <<FILL: book/report title, publisher, place, year, pp.>> (provided
+     course reading; see the discussion of hybrid QKD+PQC solutions,
+     authentication severity and timeline, and key extraction efficiency).
+
+[5]  Open Quantum Safe Project. "Open Quantum Safe." [Online]. Available:
+     https://openquantumsafe.org [Accessed: <<FILL date>>].
+
+[6]  Open Quantum Safe Project. "liboqs: C library for prototyping and
+     experimenting with quantum-resistant cryptography." GitHub repository.
+     [Online]. Available: https://github.com/open-quantum-safe/liboqs
+     [Accessed: <<FILL date>>].
+
+[7]  Quantum Key Distribution (QKD); Protocol and Data Format of REST-Based
+     Key Delivery API, ETSI GS QKD 014 V1.1.1, European Telecommunications
+     Standards Institute, Sophia Antipolis, France, Feb. 2019.
+
+[8]  S. Giri, "I connected to Google using post-quantum encryption — here's
+     what the output actually means," Medium, <<FILL date>>. [Online].
+     Available: https://medium.com/@sumit.giri199/
+     i-connected-to-google-using-post-quantum-encryption-heres-what-the-
+     output-actually-means-bbaf37194657 [Accessed: <<FILL date>>].
+     >> CAUTION: this is a practitioner blog post, and course policy warns
+        against basing work on blogs [2]. Use it ONLY for the narrow,
+        verifiable operational detail about the OQS algorithm rename, and
+        BETTER STILL, replace it by confirming the rename directly in the
+        liboqs/oqs-provider release notes and citing those instead. That
+        substitution is a quick win for source quality.
+
+[9]  "ISO/IEC/IEEE 29119 Software Testing." [Online]. Available:
+     https://softwaretestingstandard.org [Accessed: <<FILL date>>].
+     (Lists Part 1 Concepts and Definitions, Part 2 Test Processes, Part 3
+     Test Documentation, Part 4 Test Techniques, Part 5 Keyword Driven
+     Testing, Part 6 Guidelines for the use of 29119 in Agile Projects,
+     Part 11 Testing of AI-Based Systems, Part 13 Testing of Biometric
+     Systems.)
+
+[10] Software and Systems Engineering — Software Testing — Part 1: General
+     Concepts, ISO/IEC/IEEE 29119-1, International Organization for
+     Standardization / International Electrotechnical Commission / Institute
+     of Electrical and Electronics Engineers. <<VERIFY the current edition
+     year and the exact titles of the parts you cite before printing; the
+     series has been revised and part titles have changed between editions.>>
+
+[11] T. Coopmans et al., "NetSquid, a NETwork Simulator for QUantum
+     Information using Discrete events," Communications Physics, vol. 4,
+     2021. [Online]. Available:
+     https://www.nature.com/articles/s42005-021-00647-8 <<VERIFY the full
+     author list, article number, and page range before printing.>>
+
+[12] "Simulators for Quantum Network Modelling: A Comprehensive Review,"
+     arXiv preprint arXiv:2408.11993, 2024. [Online]. Available:
+     https://arxiv.org/abs/2408.11993 <<VERIFY the author list and whether a
+     peer-reviewed version now exists; prefer the published version if so.>>
+
+[13] X. Wu et al., "SeQUeNCe: a customizable discrete-event simulator of
+     quantum networks," Quantum Science and Technology. <<VERIFY the full
+     author list, volume, article number, and year.>> [Online]. Available:
+     https://bpb-us-w2.wpmucdn.com/voices.uchicago.edu/dist/0/2327/files/
+     2024/08/SeQUeNCe.pdf
+
+[14] N. Prakash, Quantum Computing. Hoboken, NJ, USA: Wiley, 2026. (Provided
+     course reading; see Ch. 9 on quantum programming frameworks — Qiskit,
+     Cirq, Q# — including strengths, limitations, and "Choosing the Right
+     Tool for the Task.")
+
+[15] <<OPTIONAL — ADD IF YOU CITE IT>> National Institute of Standards and
+     Technology, "A Statistical Test Suite for Random and Pseudorandom Number
+     Generators for Cryptographic Applications," NIST Special Publication
+     800-22. <<VERIFY revision number and publication date at nist.gov before
+     citing.>>
+
+[16] <<OPTIONAL — ADD IF YOU CITE IT>> T. Y. Chen, F.-C. Kuo, H. Liu, et al.,
+     "Metamorphic testing: A review of challenges and opportunities,"
+     ACM Computing Surveys. <<VERIFY volume, issue, article number, and year.
+     Adding a proper metamorphic-testing citation would significantly
+     strengthen Section 9.3 — currently your strongest technical section has
+     the weakest sourcing.>>
+
+[17] <<OPTIONAL>> Your own GitHub repository, "<<FILL repo name>>," commit
+     <<FILL hash>>, 2026. [Online]. Available: <<FILL URL>>.
+     (Cite your own artifact — it is the primary source for every number you
+     report.)
+
+
+================================================================================
+APPENDIX A — SUGGESTED POSTER ABSTRACT (for the required .docx)
+================================================================================
+Word count: ~220. Adjust to the instructor's limit.
+
+Research into emerging network security technologies increasingly depends on
+simulation, because the underlying hardware is costly or unavailable. The
+quality of such research therefore depends directly on the quality of the
+software process behind the simulation. This project applies incremental
+development and the Scrum framework, together with a controlled protocol for
+AI assistance, to build and validate a simulation of hybrid post-quantum
+secure key establishment combining Quantum Key Distribution with
+NIST-standardized post-quantum cryptography. Work is ordered so that every
+stage produces a running system: BB84 over an ideal channel, then channel
+loss and quantum bit error rate, then eavesdropper detection, then
+reconciliation and privacy amplification, then an ETSI-style REST key
+delivery interface, and finally a hybrid session key derived from both
+quantum-sourced and ML-KEM-sourced secrets. The central technical challenge
+is the test oracle problem: a stochastic security simulation produces
+different output every run, so correctness cannot be asserted by comparison
+with a saved result. The project addresses this with three oracle types —
+analytical bounds from protocol theory, metamorphic relations between runs,
+and differential comparison against maintained reference implementations —
+enforced by continuous integration under an explicit Definition of Done. AI
+models are confined to advisory roles behind a verification gate and are
+never cited as sources. The contribution is a transferable, auditable process
+for producing simulation-based networking research whose claims a third party
+can independently reproduce and check.
+
+
+================================================================================
+APPENDIX B — POSTER LAYOUT SUGGESTION
+================================================================================
+COLUMN 1 : Title block + identification | Problem/Motivation | Background
+           (process models, increment, Scrum, oracle)
+COLUMN 2 : Process-to-project mapping table (Sec. 4) | The Increment Ladder
+           I1–I7 (Sec. 6 Phase 7) | Definition of Done box
+COLUMN 3 : *** LARGE ORIGINAL PROCESS/ARCHITECTURE DIAGRAM *** (Sec. 7 —
+           anchor visual, ~1/3 of poster area) | AI Verification Gate detail
+COLUMN 4 : Quality Control: test pyramid + metamorphic relations table
+           (Sec. 9) | Benefits vs. Limitations side by side | Status table |
+           Conclusion
+FOOTER   : IEEE references (small type) | GitHub QR | YouTube QR | #WGP
+
+DESIGN NOTES
+- Use ONE accent color for PROCESS elements and ONE for the SYSTEM UNDER
+  TEST, and hold that mapping across every figure.
+- Give MR7 (the hybrid-property test) its own callout box. It is the single
+  most defensible technical claim on the poster.
+- Place Benefits and Limitations physically adjacent; balanced analysis is a
+  graded criterion [2].
+- Show at least one REAL plot from your own run with the seed and commit hash
+  in the caption. One real figure outranks three conceptual ones.
+- Print the "AI suggestions rejected after verification" number. It is small,
+  unusual, and immediately signals genuine critical engagement.
+
+
+================================================================================
+APPENDIX C — PRE-SUBMISSION CHECKLIST (mapped to the course requirements [2])
+================================================================================
+[ ] One focused topic selected and held throughout
+[ ] Networking problem explained and connected to CN1 concepts (Sec. 4)
+[ ] At least one ORIGINAL technical/process diagram created (Sec. 7 redrawn)
+[ ] Mapped to a lifecycle / standards framework where appropriate (Sec. 8)
+[ ] Real-world application or evidence-based use case included (Sec. 5, 9)
+[ ] BOTH benefits and limitations discussed (Sec. 10, 11)
+[ ] Current status classified AND justified with evidence (Sec. 12)
+[ ] Future impact explained (Sec. 13)
+[ ] Credible sources used; IEEE citation style applied (Sec. 15)
+[ ] Abstract completed in Microsoft Word format (Appendix A as the draft)
+[ ] GitHub repository contains poster, abstract, diagrams, references, and
+    project artifacts; README identifies the topic and links to YouTube and
+    LinkedIn material
+[ ] GitHub, YouTube, and LinkedIn materials cross-link to one another
+[ ] Poster includes a GitHub QR code and, where appropriate, a YouTube QR code
+[ ] LinkedIn reflection posted and Dr. Victor Govindaswamy tagged using
+    LinkedIn's actual tagging function (if instructed)
+[ ] ALL <<FILL>>, <<YOUR DATA>>, and <<VERIFY>> markers in this document have
+    been resolved and removed
+
+================================================================================
+END OF DOCUMENT
+================================================================================
