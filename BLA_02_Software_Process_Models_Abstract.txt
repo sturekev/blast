@@ -1,0 +1,22 @@
+================================================================================
+BLA 02 RESEARCH POSTER ABSTRACT
+Project Title: Comparing Software Process Models in Cloud-Native and Live-Service
+               Architectures: An Empirical Analysis of Netflix and Riot Games
+Author: Truong Phat Tu
+Faculty Sponsor: Dr. Visvasuresh (Victor) Govindaswamy
+Institution: Concordia University Chicago
+Course: Computer Networks / Software Engineering (BLA 02)
+Semester: Fall 2026
+Track: Software Process Models & Comparative Systems Engineering
+Hashtag: #WGP — "From Learning to Building — From Building to Innovation"
+================================================================================
+
+ABSTRACT (Word count: 218 words)
+
+Software process models structure how systems are specified, designed, validated, and evolved. This study presents a comparative software engineering analysis of two distinct large-scale industry systems: Netflix's cloud-native video streaming platform and Riot Games' live-service multiplayer game engine (League of Legends). Software development is analyzed across four core process activities—requirements specification, design and implementation, verification and validation (V&V), and continuous evolution—contrasting plan-driven Waterfall, incremental development, integration and configuration, and Agile methodologies. Netflix utilizes a fully continuous, microservices-driven DevOps model that executes thousands of production deployments daily, managed through feature flags, dynamic A/B telemetry, and Chaos Engineering fault injection. In contrast, Riot Games employs a hybrid Agile-incremental framework governed by tightly synchronized, bi-weekly global patch cadences, multi-tier public beta playtesting (PBE), and deterministic client-server validation to protect competitive integrity. The comparison demonstrates that software process selection is fundamentally constrained by system architecture, team topology, safety/security risk, and required release frequency rather than adherence to a universal "best" methodology. Large-scale platforms naturally converge toward hybrid lifecycles that combine plan-driven architectural baselines with iterative sprint execution. Emerging considerations, including AI-assisted static analysis and automated canary verification, further reinforce the principle that process models must dynamically fit operational risk and domain constraints.
+
+================================================================================
+KEYWORDS:
+Software Process Models; Agile Development; Incremental Delivery; Waterfall;
+Chaos Engineering; Microservices; Live-Service Games; Netflix; Riot Games.
+================================================================================
