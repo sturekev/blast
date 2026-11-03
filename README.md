@@ -37,5 +37,6 @@ Software Process Models · Agile Development · Incremental Delivery · Waterfal
 
 ## Project links
 
-- **YouTube:** [Add link]()
-- **LinkedIn post:** [Add link]()
+- **YouTube:** [Link](https://youtu.be/95JT58Lz9xY)
+- **LinkedIn post:** [Link](https://lnkd.in/p/gEe6MZ-f)
+- **Github Link:** [Link](https://github.com/sturekev/blast)

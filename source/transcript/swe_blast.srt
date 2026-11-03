@@ -1,0 +1,28 @@
+1
+00:00:00,000 --> 00:00:12,000
+Hello everyone, so today I want to present real quick about my research which is going to be the poster for symposium in my class about what I did in
+
+2
+00:00:12,000 --> 00:00:28,000
+comparing management method between two big company which is route games and Netflix. So this study that I'm going to present is a comparative software engineer analysis of two distinct
+
+3
+00:00:28,000 --> 00:00:40,000
+large scale industry system which is Netflix cloud native video streaming platform and route games live service multiplayer games engine.
+
+4
+00:00:40,000 --> 00:01:07,000
+We will go to detail of the overall of the how software development is analyzed across four core process activities which is requirements specification design and implementation verification and validation and continuous evolution.
+
+5
+00:01:07,000 --> 00:01:27,000
+Constructing plan driven waterfall incremental development integration and configuration and HL methodology large scale platform naturally convert toward the hybrid lifecycle that can buy
+
+6
+00:01:27,000 --> 00:01:54,000
+plan driven architectural baseline with the interactive spring execution emerging the consideration including the AIS it statistic analysis and automate canary verification further reinforce the principle that process model must dynamically fit operation risk and domain constraint.
+
+7
+00:01:54,000 --> 00:02:04,000
+Thank you for listening I will put the link and the post of the poster in detail so you can take a look thank you.
+
